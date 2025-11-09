@@ -10,13 +10,14 @@ The dashboard uses the Next.js App Router (`app/`) where `layout.tsx` wires prov
 - `npm run dev` – starts Next.js with hot reload on http://localhost:3000 for iterative UI work.
 - `npm run build` – compiles the production bundle; run before pushing to catch type- and route-level issues.
 - `npm run start` – serves the output of `next build`; use when smoke-testing the optimized bundle.
+- `npm run test` – runs the Vitest unit-test suite in watch mode by default; add `--run` in CI scripts.
 - `npm run check` – runs Ultracite check; required before every PR.
 
 ## Coding Style & Naming Conventions
 TypeScript is strict (see `tsconfig.json`), so prefer typed props and discriminated unions over `any`. Export React components as PascalCase from kebab-case files (`project-card.tsx`) to match the existing pattern. Use functional components, hooks, and the shared `cn` helper for Tailwind class composition; avoid inline hex colors when CSS variables already describe the palette in `app/globals.css`. Keep imports relative to the repo root via the `@/*` alias, and re-export UI primitives from `components/ui` when possible.
 
 ## Testing Guidelines
-Automated tests are not yet wired up—add Vitest + React Testing Library co-located under `__tests__` folders or `*.test.tsx` files that mirror the component path. Until the test runner is introduced, rely on `npm run lint` plus manual verification in `npm run start`. When adding tests, cover card aggregation logic, dialog flows, and any data-mapping utilities, and enforce >80% coverage for new modules.
+Vitest + React Testing Library are configured. Co-locate specs as `*.test.tsx`/`*.test.ts` next to the component or inside `__tests__/` folders that mirror the path. Run `npm run test` for the default Vitest watcher or `npm run test -- --run` for a single pass in CI. Prioritize coverage for aggregation helpers, dialog flows, toast/undo behavior, and data-mapping utilities, and keep new modules at ≥80% coverage. Still pair unit tests with `npm run check` and manual verification via `npm run start` for UI sanity.
 
 ## Commit & Pull Request Guidelines
 Commits follow Conventional Commits (`feat: ...` already exists in history), so continue using `feat|fix|chore|refactor(scope): message`. Keep diffs focused (one feature or fix per commit) and include context on data changes (e.g., "sync KPI palette with globals.css tokens"). Every PR must reference an issue or short problem statement, list the key commands you ran (`npm run lint`, `npm run build`), and attach screenshots or recordings for UI-altering work. Request review only after CI-equivalent checks pass locally.
