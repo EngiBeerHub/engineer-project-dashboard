@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
-type Project = {
+export type Project = {
   id: string;
   title: string;
   startDate: string;
@@ -26,7 +26,7 @@ type Project = {
   };
 };
 
-const sampleProjects: Project[] = [
+export const SAMPLE_PROJECTS: Project[] = [
   {
     id: "1",
     title: "ダッシュボードUIリニューアル",
@@ -121,7 +121,7 @@ const createEmptyTotals = (): ProjectTotals => ({
   social: 0,
 });
 
-const calculateTotals = (list: Project[]): ProjectTotals =>
+export const calculateTotals = (list: Project[]): ProjectTotals =>
   list.reduce((acc, project) => {
     acc.energy += project.parameters.energy;
     acc.trust += project.parameters.trust;
@@ -131,7 +131,7 @@ const calculateTotals = (list: Project[]): ProjectTotals =>
     return acc;
   }, createEmptyTotals());
 
-const getParameterHighlight = (
+export const getParameterHighlight = (
   totals: ProjectTotals,
   variant: "top" | "low"
 ) => {
@@ -157,7 +157,7 @@ const getParameterHighlight = (
   return PARAMETER_LABELS[lowKey];
 };
 
-const getTotalByMode = (
+export const getTotalByMode = (
   mode: DashboardMode,
   totals: {
     current: ProjectTotals;
@@ -174,7 +174,7 @@ const getTotalByMode = (
   return totals.all;
 };
 
-function useDashboardState(initialProjects: Project[]) {
+export function useDashboardState(initialProjects: Project[]) {
   const [projects, setProjects] = useState<Project[]>(initialProjects);
   const [mode, setMode] = useState<DashboardMode>("current");
   const [isDoneExpanded, setIsDoneExpanded] = useState(false);
@@ -728,7 +728,7 @@ export default function DashboardPage() {
     handleCompleteSubmit,
     handleEdit,
     handleEditSubmit,
-  } = useDashboardState(sampleProjects);
+  } = useDashboardState(SAMPLE_PROJECTS);
 
   return (
     <div className="min-h-screen bg-background">
