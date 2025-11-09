@@ -209,7 +209,7 @@ export function RadarChart({ data, multiData }: RadarChartProps) {
 
           return (
             <text
-              className="font-semibold text-sm sm:text-base"
+              className="font-semibold text-base sm:text-lg"
               dominantBaseline="middle"
               fill={label.color}
               key={`label-${label.key}`}
