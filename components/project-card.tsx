@@ -24,10 +24,16 @@ type Project = {
 type ProjectCardProps = {
   project: Project;
   onComplete?: (id: string) => void;
+  onQuickComplete?: (id: string) => void;
   onEdit?: (id: string) => void;
 };
 
-export function ProjectCard({ project, onComplete, onEdit }: ProjectCardProps) {
+export function ProjectCard({
+  project,
+  onComplete,
+  onQuickComplete,
+  onEdit,
+}: ProjectCardProps) {
   const isDone = project.status === "done";
 
   const formatDate = (date: string) =>
@@ -67,7 +73,7 @@ export function ProjectCard({ project, onComplete, onEdit }: ProjectCardProps) {
           <Checkbox
             checked={false}
             className="h-5 w-5"
-            onCheckedChange={() => onComplete?.(project.id)}
+            onCheckedChange={() => onQuickComplete?.(project.id)}
           />
         )}
       </div>

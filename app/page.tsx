@@ -241,6 +241,36 @@ function useDashboardState(initialProjects: Project[]) {
     [projects]
   );
 
+  const handleQuickComplete = useCallback(
+    (projectId: string) => {
+      const project = projects.find((p) => p.id === projectId);
+      if (!project) {
+        return;
+      }
+
+      const today = new Date().toISOString().split("T")[0];
+
+      setProjects((prev) =>
+        prev.map((p) =>
+          p.id === projectId
+            ? {
+                ...p,
+                status: "done" as const,
+                endDate: p.endDate ?? today,
+              }
+            : p
+        )
+      );
+
+      setToast({
+        message: `"${project.title}" を完了しました`,
+        projectId: project.id,
+      });
+      setTimeout(dismissToast, 5000);
+    },
+    [dismissToast, projects]
+  );
+
   const handleUndo = useCallback(
     (projectId: string) => {
       setProjects((prev) =>
@@ -372,6 +402,7 @@ function useDashboardState(initialProjects: Project[]) {
     lowParam,
     handleComplete,
     handleUndo,
+    handleQuickComplete,
     handleCreateProject,
     handleCompleteSubmit,
     handleEdit,
@@ -473,6 +504,7 @@ type ProjectsSectionProps = {
   onCreate: () => void;
   onToggleDone: () => void;
   onComplete: (id: string) => void;
+  onQuickComplete: (id: string) => void;
   onEdit: (id: string) => void;
 };
 
@@ -484,6 +516,7 @@ function ProjectsSection({
   onCreate,
   onToggleDone,
   onComplete,
+  onQuickComplete,
   onEdit,
 }: ProjectsSectionProps) {
   const shouldShowEmptyState =
@@ -497,6 +530,7 @@ function ProjectsSection({
       <ActiveProjectsSection
         mode={mode}
         onComplete={onComplete}
+        onQuickComplete={onQuickComplete}
         onCreate={onCreate}
         onEdit={onEdit}
         projects={activeProjects}
@@ -533,6 +567,7 @@ type ActiveProjectsSectionProps = {
   projects: Project[];
   onCreate: () => void;
   onComplete: (id: string) => void;
+  onQuickComplete: (id: string) => void;
   onEdit: (id: string) => void;
 };
 
@@ -541,6 +576,7 @@ function ActiveProjectsSection({
   projects,
   onCreate,
   onComplete,
+  onQuickComplete,
   onEdit,
 }: ActiveProjectsSectionProps) {
   const shouldRender =
@@ -568,6 +604,7 @@ function ActiveProjectsSection({
           <ProjectCard
             key={project.id}
             onComplete={onComplete}
+            onQuickComplete={onQuickComplete}
             onEdit={onEdit}
             project={project}
           />
@@ -686,6 +723,7 @@ export default function DashboardPage() {
     lowParam,
     handleComplete,
     handleUndo,
+    handleQuickComplete,
     handleCreateProject,
     handleCompleteSubmit,
     handleEdit,
@@ -718,6 +756,7 @@ export default function DashboardPage() {
           isDoneExpanded={isDoneExpanded}
           mode={mode}
           onComplete={handleComplete}
+          onQuickComplete={handleQuickComplete}
           onCreate={() => setIsCreateModalOpen(true)}
           onEdit={handleEdit}
           onToggleDone={() => setIsDoneExpanded((previous) => !previous)}

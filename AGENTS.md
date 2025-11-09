@@ -1,3 +1,6 @@
+# Behavior Guilelines
+Always reply in 日本語
+
 # Repository Guidelines
 
 ## Project Structure & Module Organization
@@ -7,7 +10,7 @@ The dashboard uses the Next.js App Router (`app/`) where `layout.tsx` wires prov
 - `npm run dev` – starts Next.js with hot reload on http://localhost:3000 for iterative UI work.
 - `npm run build` – compiles the production bundle; run before pushing to catch type- and route-level issues.
 - `npm run start` – serves the output of `next build`; use when smoke-testing the optimized bundle.
-- `npm run lint` – runs ESLint with the Next.js Core Web Vitals preset; required before every PR.
+- `npm run check` – runs Ultracite check; required before every PR.
 
 ## Coding Style & Naming Conventions
 TypeScript is strict (see `tsconfig.json`), so prefer typed props and discriminated unions over `any`. Export React components as PascalCase from kebab-case files (`project-card.tsx`) to match the existing pattern. Use functional components, hooks, and the shared `cn` helper for Tailwind class composition; avoid inline hex colors when CSS variables already describe the palette in `app/globals.css`. Keep imports relative to the repo root via the `@/*` alias, and re-export UI primitives from `components/ui` when possible.
