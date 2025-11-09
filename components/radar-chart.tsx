@@ -143,38 +143,38 @@ export function RadarChart({ data, multiData }: RadarChartProps) {
           <>
             {/* Done projects polygon */}
             <polygon
-              fill="rgb(107, 114, 128)"
-              fillOpacity="0.2"
+              fill="rgb(75, 85, 99)"
+              fillOpacity="0.25"
               points={donePolygonPoints}
-              stroke="rgb(107, 114, 128)"
-              strokeDasharray="4 4"
-              strokeWidth="2"
+              stroke="rgb(75, 85, 99)"
+              strokeWidth="3"
             />
             {doneDataPoints.map((point) => (
               <circle
                 cx={point.x}
                 cy={point.y}
-                fill="rgb(107, 114, 128)"
+                fill="rgb(75, 85, 99)"
                 key={`done-${point.key}`}
-                r="3"
+                r="4"
               />
             ))}
 
             {/* Current projects polygon */}
             <polygon
-              fill="rgb(20, 184, 166)"
+              fill="rgb(45, 212, 191)"
               fillOpacity="0.2"
               points={currentPolygonPoints}
-              stroke="rgb(20, 184, 166)"
+              stroke="rgb(45, 212, 191)"
+              strokeDasharray="4 4"
               strokeWidth="2"
             />
             {currentDataPoints.map((point) => (
               <circle
                 cx={point.x}
                 cy={point.y}
-                fill="rgb(20, 184, 166)"
+                fill="rgb(45, 212, 191)"
                 key={`current-${point.key}`}
-                r="4"
+                r="3"
               />
             ))}
           </>
