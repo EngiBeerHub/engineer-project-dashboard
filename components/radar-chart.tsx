@@ -8,6 +8,7 @@ type RadarChartProps = {
     skill: number;
     social: number;
   };
+  maxValue?: number;
   multiData?: {
     current: {
       energy: number;
@@ -26,7 +27,7 @@ type RadarChartProps = {
   };
 };
 
-export function RadarChart({ data, multiData }: RadarChartProps) {
+export function RadarChart({ data, multiData, maxValue }: RadarChartProps) {
   const labels = [
     { key: "energy", label: "エネルギー", color: "rgb(234, 88, 12)" },
     { key: "trust", label: "信用", color: "rgb(37, 99, 235)" },
@@ -45,9 +46,15 @@ export function RadarChart({ data, multiData }: RadarChartProps) {
   );
 
   // Calculate points for the data polygon
+  const chartMaxValue = maxValue && maxValue > 0 ? maxValue : 5;
+
   const calculatePoint = (value: number, angle: number) => {
-    const normalizedValue = Math.max(-5, Math.min(5, value));
-    const distance = ((normalizedValue + 5) / 10) * radius;
+    const normalizedValue = Math.max(
+      -chartMaxValue,
+      Math.min(chartMaxValue, value)
+    );
+    const distance =
+      ((normalizedValue + chartMaxValue) / (2 * chartMaxValue)) * radius;
     return {
       x: centerX + distance * Math.cos(angle - Math.PI / 2),
       y: centerY + distance * Math.sin(angle - Math.PI / 2),
@@ -227,7 +234,7 @@ export function RadarChart({ data, multiData }: RadarChartProps) {
         <div className="mt-4 flex justify-center gap-4 text-sm sm:text-base">
           <div className="flex items-center gap-2">
             <div className="h-3 w-3 rounded-full bg-teal-500" />
-            <span className="text-muted-foreground">現在取組中</span>
+            <span className="text-muted-foreground">現在取組中（累計）</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="h-3 w-3 rounded-full bg-gray-500" />

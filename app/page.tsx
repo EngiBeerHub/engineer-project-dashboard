@@ -121,6 +121,14 @@ const createEmptyTotals = (): ProjectTotals => ({
   social: 0,
 });
 
+const sumTotals = (first: ProjectTotals, second: ProjectTotals): ProjectTotals => ({
+  energy: first.energy + second.energy,
+  trust: first.trust + second.trust,
+  qol: first.qol + second.qol,
+  skill: first.skill + second.skill,
+  social: first.social + second.social,
+});
+
 export const calculateTotals = (list: Project[]): ProjectTotals =>
   list.reduce((acc, project) => {
     acc.energy += project.parameters.energy;
@@ -464,17 +472,35 @@ function RadarSummary({
   currentTotal,
   doneTotal,
 }: RadarSummaryProps) {
+  const cumulativeTotal = useMemo(
+    () => sumTotals(currentTotal, doneTotal),
+    [currentTotal, doneTotal]
+  );
+  const dynamicMaxValue = useMemo(() => {
+    const values = Object.values(cumulativeTotal).map((value) =>
+      Math.abs(value)
+    );
+    const maxAbs = values.length ? Math.max(...values) : 0;
+    const fallback = 5;
+    const resolved = maxAbs > fallback ? maxAbs : fallback;
+    return resolved || fallback;
+  }, [cumulativeTotal]);
+
   return (
     <Card className="mb-8 p-8">
       <div className="flex flex-col items-center">
         <RadarChart
           data={total}
+          maxValue={dynamicMaxValue}
           multiData={
             mode === "virtual"
-              ? { current: currentTotal, done: doneTotal }
+              ? { current: cumulativeTotal, done: doneTotal }
               : undefined
           }
         />
+        <p className="mt-4 text-xs text-muted-foreground">
+          現在のスケール上限: {dynamicMaxValue.toFixed(0)}
+        </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <Badge className="text-sm" variant="secondary">
             合計 {totalSum > 0 ? "+" : ""}

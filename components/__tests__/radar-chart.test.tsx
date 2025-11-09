@@ -31,7 +31,7 @@ describe("RadarChart", () => {
     );
 
     expect(container.querySelectorAll("polygon")).toHaveLength(2);
-    expect(screen.getByText("現在取組中")).toBeVisible();
+    expect(screen.getByText("現在取組中（累計）")).toBeVisible();
     expect(screen.getByText("終了")).toBeVisible();
   });
 });
