@@ -209,7 +209,7 @@ export function RadarChart({ data, multiData }: RadarChartProps) {
 
           return (
             <text
-              className="font-semibold text-xs"
+              className="font-semibold text-sm sm:text-base"
               dominantBaseline="middle"
               fill={label.color}
               key={`label-${label.key}`}
@@ -224,7 +224,7 @@ export function RadarChart({ data, multiData }: RadarChartProps) {
       </svg>
 
       {multiData && (
-        <div className="mt-4 flex justify-center gap-4 text-xs">
+        <div className="mt-4 flex justify-center gap-4 text-sm sm:text-base">
           <div className="flex items-center gap-2">
             <div className="h-3 w-3 rounded-full bg-teal-500" />
             <span className="text-muted-foreground">現在取組中</span>
