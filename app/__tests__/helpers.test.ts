@@ -1,24 +1,29 @@
+import { beforeEach, describe, expect, test } from "vitest";
 import {
-  type Project,
-  SAMPLE_PROJECTS,
   calculateTotals,
   getParameterHighlight,
   getTotalByMode,
+  type Project,
+  SAMPLE_PROJECTS,
 } from "@/app/page";
 
 let projectSequence = 0;
 
 const createProject = (
   overrides: Partial<Project> & { parameters: Project["parameters"] }
-): Project => ({
-  id: overrides.id ?? `project-${projectSequence++}`,
-  title: overrides.title ?? "テストプロジェクト",
-  startDate: overrides.startDate ?? "2024-01-01",
-  status: overrides.status ?? "active",
-  parameters: overrides.parameters,
-  endDate: overrides.endDate,
-  memo: overrides.memo,
-});
+): Project => {
+  const id = overrides.id ?? `project-${projectSequence}`;
+  projectSequence += 1;
+  return {
+    id,
+    title: overrides.title ?? "テストプロジェクト",
+    startDate: overrides.startDate ?? "2024-01-01",
+    status: overrides.status ?? "active",
+    parameters: overrides.parameters,
+    endDate: overrides.endDate,
+    memo: overrides.memo,
+  };
+};
 
 const cloneSampleProjects = (): Project[] =>
   SAMPLE_PROJECTS.map((project) => ({
