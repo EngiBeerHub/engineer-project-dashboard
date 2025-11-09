@@ -1,0 +1,17 @@
+error: unknown option '--max-diagnostics=200'
+
+
+
+Usage: ultracite check [options] [specific files to lint...]
+
+Run Biome linter without fixing files
+
+Arguments:
+  specific files to lint       array specific files to lint
+
+Options:
+  --diagnostic-level [string]  level of diagnostics to show. In order, from the
+                               lowest to the most important: info, warn, error.
+                               (choices: "info", "warn", "error")
+  -h, --help                   display help for command
+

@@ -6,8 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "ultracite lint",
-    "format": "ultracite format"
+    "check": "ultracite check",
+    "fix": "ultracite fix"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
