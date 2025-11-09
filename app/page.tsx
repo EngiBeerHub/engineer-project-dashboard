@@ -8,6 +8,7 @@ import { RadarChart } from "@/components/radar-chart";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 type Project = {
   id: string;
@@ -381,9 +382,10 @@ function useDashboardState(initialProjects: Project[]) {
 type ModeToggleProps = {
   mode: DashboardMode;
   onChange: (mode: DashboardMode) => void;
+  className?: string;
 };
 
-function ModeToggle({ mode, onChange }: ModeToggleProps) {
+function ModeToggle({ mode, onChange, className }: ModeToggleProps) {
   const options: { value: DashboardMode; label: string }[] = [
     { value: "done", label: "終了" },
     { value: "current", label: "現在" },
@@ -391,7 +393,12 @@ function ModeToggle({ mode, onChange }: ModeToggleProps) {
   ];
 
   return (
-    <div className="flex gap-2">
+    <div
+      className={cn(
+        "flex w-full flex-wrap gap-2 sm:w-auto sm:flex-nowrap sm:justify-end",
+        className
+      )}
+    >
       {options.map((option) => (
         <Button
           className="text-sm"
@@ -688,9 +695,9 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h1 className="font-semibold text-3xl text-foreground">
-            あなた専用のダッシュボード
+            Your Dashboard
           </h1>
           <ModeToggle mode={mode} onChange={(value) => setMode(value)} />
         </div>
