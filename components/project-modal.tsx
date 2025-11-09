@@ -1,9 +1,12 @@
 "use client";
 
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import type React from "react";
-
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -11,10 +14,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
 type ProjectParameters = {
   energy: number;
@@ -128,26 +136,23 @@ export function ProjectModal({
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="startDate">開始日</Label>
-            <Input
-              id="startDate"
-              onChange={(e) => setStartDate(e.target.value)}
-              required
-              type="date"
-              value={startDate}
-            />
-          </div>
+          <DatePickerField
+            id="startDate"
+            label="開始日"
+            onChange={setStartDate}
+            placeholder="開始日を選択"
+            required
+            value={startDate}
+          />
 
-          <div className="space-y-2">
-            <Label htmlFor="endDate">終了予定日（任意）</Label>
-            <Input
-              id="endDate"
-              onChange={(e) => setEndDate(e.target.value)}
-              type="date"
-              value={endDate}
-            />
-          </div>
+          <DatePickerField
+            allowClear
+            id="endDate"
+            label="終了予定日（任意）"
+            onChange={setEndDate}
+            placeholder="設定しない"
+            value={endDate}
+          />
 
           <div className="space-y-2">
             <Label htmlFor="memo">メモ</Label>
@@ -225,6 +230,11 @@ export function CompleteModal({
     project.parameters
   );
 
+  useEffect(() => {
+    setParameters(project.parameters);
+    setEndDate(new Date().toISOString().split("T")[0]);
+  }, [project]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onComplete({ endDate, parameters });
@@ -249,16 +259,14 @@ export function CompleteModal({
           </DialogDescription>
         </DialogHeader>
         <form className="space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-2">
-            <Label htmlFor="endDate">終了日</Label>
-            <Input
-              id="endDate"
-              onChange={(e) => setEndDate(e.target.value)}
-              required
-              type="date"
-              value={endDate}
-            />
-          </div>
+          <DatePickerField
+            id="complete-end-date"
+            label="終了日"
+            onChange={setEndDate}
+            placeholder="終了日を選択"
+            required
+            value={endDate}
+          />
 
           <div className="space-y-4">
             <Label>最終パラメーター調整（-5 〜 +5）</Label>
@@ -296,5 +304,84 @@ export function CompleteModal({
         </form>
       </DialogContent>
     </Dialog>
+  );
+}
+
+type DatePickerFieldProps = {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  required?: boolean;
+  allowClear?: boolean;
+};
+
+function DatePickerField({
+  id,
+  label,
+  value,
+  onChange,
+  placeholder,
+  required,
+  allowClear = false,
+}: DatePickerFieldProps) {
+  const [open, setOpen] = useState(false);
+  const selectedDate = value ? new Date(value) : undefined;
+
+  const handleSelect = (date?: Date) => {
+    if (!date) {
+      return;
+    }
+    onChange(format(date, "yyyy-MM-dd"));
+    setOpen(false);
+  };
+
+  const displayValue = selectedDate
+    ? format(selectedDate, "yyyy年M月d日")
+    : (placeholder ?? "日付を選択");
+
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={id}>
+        {label}
+        {required && <span className="text-destructive">*</span>}
+      </Label>
+      <Popover onOpenChange={setOpen} open={open}>
+        <PopoverTrigger asChild>
+          <Button
+            className={cn(
+              "w-full justify-start text-left font-normal",
+              !value && "text-muted-foreground"
+            )}
+            id={id}
+            type="button"
+            variant="outline"
+          >
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {displayValue}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent align="start" className="w-auto p-0" side="bottom">
+          <Calendar
+            defaultMonth={selectedDate}
+            initialFocus
+            mode="single"
+            onSelect={handleSelect}
+            selected={selectedDate}
+          />
+        </PopoverContent>
+      </Popover>
+      {allowClear && value && (
+        <Button
+          className="h-auto p-0 text-muted-foreground text-xs underline-offset-2 hover:underline"
+          onClick={() => onChange("")}
+          type="button"
+          variant="ghost"
+        >
+          日付をクリア
+        </Button>
+      )}
+    </div>
   );
 }
