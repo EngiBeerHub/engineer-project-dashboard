@@ -690,7 +690,7 @@ export default function DashboardPage() {
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center justify-between">
           <h1 className="font-semibold text-3xl text-foreground">
-            My Dashboard
+            あなた専用のダッシュボード
           </h1>
           <ModeToggle mode={mode} onChange={(value) => setMode(value)} />
         </div>
