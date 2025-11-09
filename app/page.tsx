@@ -418,9 +418,9 @@ type ModeToggleProps = {
 
 function ModeToggle({ mode, onChange, className }: ModeToggleProps) {
   const options: { value: DashboardMode; label: string }[] = [
-    { value: "done", label: "終了" },
     { value: "current", label: "現在" },
-    { value: "virtual", label: "仮想" },
+    { value: "done", label: "終了" },
+    { value: "virtual", label: "両方" },
   ];
 
   return (
@@ -530,9 +530,9 @@ function ProjectsSection({
       <ActiveProjectsSection
         mode={mode}
         onComplete={onComplete}
-        onQuickComplete={onQuickComplete}
         onCreate={onCreate}
         onEdit={onEdit}
+        onQuickComplete={onQuickComplete}
         projects={activeProjects}
       />
       <DoneProjectsSection
@@ -604,8 +604,8 @@ function ActiveProjectsSection({
           <ProjectCard
             key={project.id}
             onComplete={onComplete}
-            onQuickComplete={onQuickComplete}
             onEdit={onEdit}
+            onQuickComplete={onQuickComplete}
             project={project}
           />
         ))}
@@ -756,9 +756,9 @@ export default function DashboardPage() {
           isDoneExpanded={isDoneExpanded}
           mode={mode}
           onComplete={handleComplete}
-          onQuickComplete={handleQuickComplete}
           onCreate={() => setIsCreateModalOpen(true)}
           onEdit={handleEdit}
+          onQuickComplete={handleQuickComplete}
           onToggleDone={() => setIsDoneExpanded((previous) => !previous)}
         />
       </div>
